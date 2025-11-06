@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}{% block content %}
+<h2>Drivers</h2>
+<form method="post" action="{{ url_for('add_driver') }}" class="row" style="margin-bottom:12px;">
+  <div><label>Driver Name</label><input class="input" name="driver_name" required></div>
+  <div><label>Status</label><select class="input" name="active" required><option value="1">Active</option><option value="0">Inactive</option></select></div>
+  <div style="align-self:end"><button class="btn" type="submit">Add Driver</button></div>
+</form>
+{% if d_error %}<div class="badge red">{{ d_error }}</div>{% endif %}
+<table><tr><th>Name</th><th>Status</th><th>Actions</th></tr>
+{% for d in drivers %}
+<tr><td>{{ d['name'] }}</td><td>{% if d['active'] %}<span class="badge green">Active</span>{% else %}<span class="badge red">Inactive</span>{% endif %}</td>
+<td><form method="post" action="{{ url_for('delete_driver', driver_id=d['id']) }}" style="display:inline" onsubmit="return confirmDelete();"><button class="btn outline" type="submit">Delete</button></form></td>
+</tr>{% endfor %}</table>
+<script>function confirmDelete(){ const p=prompt("Type for password here"); return p==="1322420"; }</script>
+{% endblock %}

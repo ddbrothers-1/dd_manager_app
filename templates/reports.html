@@ -1,0 +1,15 @@
+
+{% extends 'base.html' %}{% block content %}
+<h2>Monthly Reports</h2>
+<form method="get" class="row" style="margin-bottom:12px;">
+  <div><label>Truck</label><select class="input" name="truck_id"><option value="">All Trucks</option>{% for t in trucks %}<option value="{{ t['id'] }}" {{ 'selected' if request.args.get('truck_id','')==t['id']|string else '' }}>{{ t['truck_no'] }}</option>{% endfor %}</select></div>
+  <div><label>Month</label><select class="input" name="month" required>{% for m in months %}<option value="{{ m[0] }}" {{ 'selected' if request.args.get('month')==m[0]|string else '' }}>{{ m[1] }}</option>{% endfor %}</select></div>
+  <div><label>Year</label><select class="input" name="year" required>{% for y in years %}<option value="{{ y }}" {{ 'selected' if request.args.get('year')==y|string else '' }}>{{ y }}</option>{% endfor %}</select></div>
+  <div style="align-self:end"><button class="btn" name="action" value="view" type="submit">View</button></div>
+  <div style="align-self:end"><button class="btn outline" name="action" value="pdf" type="submit">Download PDF</button></div>
+</form>
+{% if no_data %}<div class="badge">No data found.</div>{% else %}
+<table><tr><th>Date</th><th>Truck</th><th>Driver</th><th>Category</th><th>Type</th><th>Amount</th></tr>
+{% for r in rows %}<tr><td>{{ r['date'] }}</td><td>{{ r['truck_no'] }}</td><td>{{ r['driver_name'] }}</td><td>{{ r['kind'] }}</td><td>{{ r['etype'] }}</td><td>{{ r['amount']|round(2) }}</td></tr>{% endfor %}
+</table>{% endif %}
+{% endblock %}

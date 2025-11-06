@@ -1,0 +1,31 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DD Brothers Manager</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0b2a4a">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='dd_logo.png') }}" alt="DD"><div class="t">DD Brothers</div>
+    </div>
+    <div class="nav">
+      <a href="{{ url_for('home') }}" class="{{ 'active' if active=='home' else '' }}">Home</a>
+      <a href="{{ url_for('entries') }}" class="{{ 'active' if active=='entries' else '' }}">Expense & Income</a>
+      <a href="{{ url_for('trucks') }}" class="{{ 'active' if active=='trucks' else '' }}">Trucks</a>
+      <a href="{{ url_for('drivers') }}" class="{{ 'active' if active=='drivers' else '' }}">Drivers</a>
+      <a href="{{ url_for('reports') }}" class="{{ 'active' if active=='reports' else '' }}">Monthly Reports</a>
+      <a href="{{ url_for('driver_pay') }}" class="{{ 'active' if active=='driver_pay' else '' }}">Driver Pay</a>
+      <a href="{{ url_for('hst') }}" class="{{ 'active' if active=='hst' else '' }}">HST</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+  <div class="main">{% block content %}{% endblock %}<div class="footer">Created by DD Manager • {{ now.strftime('%Y-%m-%d %H:%M') }}</div></div>
+</body>
+</html>

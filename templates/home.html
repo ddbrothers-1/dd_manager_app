@@ -1,0 +1,10 @@
+
+{% extends 'base.html' %}{% block content %}
+<div class="header"><div class="header-bar"><img src="{{ url_for('static', filename='dd_logo.png') }}"><div>Dashboard Summary</div></div></div>
+<div class="cards">
+  <div class="card"><div class="kv">Total Income</div><div class="v">{{ total_income|round(2) }}</div></div>
+  <div class="card"><div class="kv">Total Expenses</div><div class="v">{{ total_expense|round(2) }}</div></div>
+  <div class="card"><div class="kv">Net</div><div class="v {{ 'ok' if net>=0 else 'bad' }}">{{ net|round(2) }}</div></div>
+  <div class="card"><div class="kv">Active Trucks / Drivers</div><div class="v">{{ active_trucks }} / {{ active_drivers }}</div></div>
+</div>
+{% endblock %}

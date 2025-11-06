@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}{% block content %}
+<h2>Edit Entry</h2>
+<form method="post" class="row" style="margin-bottom:12px;">
+  <div><label>Category</label><select class="input" name="kind" required>
+    <option value="Income" {{ 'selected' if entry['kind']=='Income' else '' }}>Income</option>
+    <option value="Expense" {{ 'selected' if entry['kind']=='Expense' else '' }}>Expense</option></select></div>
+  <div><label>Type</label><input class="input" name="etype" value="{{ entry['etype'] }}" required></div>
+  <div><label>Truck</label><select class="input" name="truck_id" required>{% for t in trucks %}<option value="{{ t['id'] }}" {{ 'selected' if t['id']==entry['truck_id'] else '' }}>{{ t['truck_no'] }}</option>{% endfor %}</select></div>
+  <div><label>Driver</label><select class="input" name="driver_id" required>{% for d in drivers %}<option value="{{ d['id'] }}" {{ 'selected' if d['id']==entry['driver_id'] else '' }}>{{ d['name'] }}</option>{% endfor %}</select></div>
+  <div><label>Amount ($)</label><input class="input" type="number" name="amount" step="0.01" value="{{ entry['amount'] }}" required></div>
+  <div><label>Date</label><input class="input" type="date" name="date" value="{{ entry['date'] }}" required onclick="this.showPicker && this.showPicker()"></div>
+  <div><label>Description</label><input class="input" name="description" value="{{ entry['description'] }}" required></div>
+  <div><label>Include HST (Expense only)</label><input type="checkbox" name="hst_included" {{ 'checked' if entry['hst_included'] else '' }}></div>
+  <div style="align-self:end"><button class="btn" type="submit">Save Changes</button></div>
+</form>
+<script> if(prompt("Type for password here")!=="1322420"){ history.back(); } </script>
+{% endblock %}

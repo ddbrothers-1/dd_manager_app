@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}{% block content %}
+<h2>Driver Pay</h2>
+<form method="get" class="row" style="margin-bottom:12px;">
+  <div><label>Driver</label><select class="input" name="driver_id" required>{% for d in drivers %}<option value="{{ d['id'] }}" {{ 'selected' if request.args.get('driver_id','')==d['id']|string else '' }}>{{ d['name'] }}</option>{% endfor %}</select></div>
+  <div><label>From</label><input class="input" type="date" name="start" value="{{ request.args.get('start','') }}" required onclick="this.showPicker && this.showPicker()"></div>
+  <div><label>To</label><input class="input" type="date" name="end" value="{{ request.args.get('end','') }}" required onclick="this.showPicker && this.showPicker()"></div>
+  <div style="align-self:end"><button class="btn" type="submit">View</button></div>
+</form>
+{% if rows is not None %}
+<table><tr><th>Date</th><th>Truck</th><th>Type</th><th>Amount</th><th>Description</th></tr>
+{% for r in rows %}<tr><td>{{ r['date'] }}</td><td>{{ r['truck_no'] }}</td><td>{{ r['etype'] }}</td><td>{{ r['amount']|round(2) }}</td><td>{{ r['description'] }}</td></tr>{% endfor %}
+</table>
+<div class="card" style="margin-top:10px;"><div class="kv">Total</div><div class="v">{{ total|round(2) }}</div></div>
+{% endif %}
+{% endblock %}

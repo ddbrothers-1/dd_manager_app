@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}{% block content %}
+<h2>Expense & Income</h2>
+<form id="entry-form" method="post" action="{{ url_for('add_entry') }}" class="row" style="margin-bottom:12px;">
+  <div><label>Category</label>
+    <select id="kind" class="input" name="kind" required onchange="toggleTypeList()">
+      <option value="">Select</option><option value="Income">Income</option><option value="Expense">Expense</option>
+    </select></div>
+  <div><label>Type</label><select id="type" class="input" name="etype" required><option value="">Select type</option></select></div>
+  <div><label>Truck</label><select id="truck" class="input" name="truck_id" required><option value="">Select truck</option>{% for t in trucks %}<option value="{{ t['id'] }}">{{ t['truck_no'] }}</option>{% endfor %}</select></div>
+  <div><label>Driver</label><select id="driver" class="input" name="driver_id" required><option value="">Select driver</option>{% for d in drivers %}<option value="{{ d['id'] }}">{{ d['name'] }}</option>{% endfor %}</select></div>
+  <div><label>Amount ($)</label><input id="amount" class="input" type="number" name="amount" step="0.01" required></div>
+  <div><label>Date</label><input id="date" class="input" type="date" name="date" required onclick="this.showPicker && this.showPicker()"></div>
+  <div><label>Description</label><input id="description" class="input" name="description" required></div>
+  <div id="hst_box" style="display:none;"><label><input id="hst_included" type="checkbox" name="hst_included" required> Include HST (Expense only)</label></div>
+  <div style="align-self:end"><button class="btn" type="submit">Save</button></div>
+</form>
+<table><tr><th>Date</th><th>Truck</th><th>Driver</th><th>Category</th><th>Type</th><th>Amount</th><th>HST?</th><th>Description</th><th>Edited</th><th>Actions</th></tr>
+{% for r in entries %}
+<tr>
+<td>{{ r['date'] }}</td><td>{{ r['truck_no'] }}</td><td>{{ r['driver_name'] }}</td><td>{{ r['kind'] }}</td><td>{{ r['etype'] }}</td><td>{{ r['amount']|round(2) }}</td>
+<td>{% if r['hst_included'] %}<span class="badge green">Yes</span>{% else %}No{% endif %}</td><td>{{ r['description'] }}</td>
+<td>{% if r['edited'] %}<span class="badge">Yes</span>{% else %}No{% endif %}</td>
+<td><form method="post" action="{{ url_for('delete_entry', entry_id=r['id']) }}" style="display:inline" onsubmit="return confirmDelete();"><button class="btn outline" type="submit">Delete</button></form>
+<form method="get" action="{{ url_for('edit_entry', entry_id=r['id']) }}" style="display:inline"><button class="btn" type="submit">Edit</button></form></td>
+</tr>{% endfor %}</table>
+<script>
+const INCOME_TYPES=["Lor-Cor","HST Return","Other"]; const EXPENSE_TYPES=["Fuel","Insurance","Driver pay","Parking","Truck and trailer expenses","Tires","Other"];
+function toggleTypeList(){ const k=document.getElementById('kind').value; const type=document.getElementById('type'); const hst=document.getElementById('hst_box');
+  type.innerHTML='<option value="">Select type</option>';
+  if(k==='Income'){ INCOME_TYPES.forEach(t=>{let o=document.createElement('option'); o.value=t;o.textContent=t; type.appendChild(o);}); hst.style.display='none'; document.getElementById('hst_included').required=false; document.getElementById('hst_included').checked=false; }
+  else if(k==='Expense'){ EXPENSE_TYPES.forEach(t=>{let o=document.createElement('option'); o.value=t;o.textContent=t; type.appendChild(o);}); hst.style.display='block'; document.getElementById('hst_included').required=true; }
+  else { hst.style.display='none'; document.getElementById('hst_included').required=false; } }
+function confirmDelete(){ const p=prompt("Type for password here"); return p==="1322420"; }
+</script>
+{% endblock %}

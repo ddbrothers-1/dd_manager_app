@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}{% block content %}
+<h2>Trucks</h2>
+<form method="post" action="{{ url_for('add_truck') }}" class="row" style="margin-bottom:12px;">
+  <div><label>Truck # (numbers only)</label><input class="input" name="truck_no" pattern="\d+" required></div>
+  <div><label>Status</label><select class="input" name="active" required><option value="1">Active</option><option value="0">Inactive</option></select></div>
+  <div style="align-self:end"><button class="btn" type="submit">Add Truck</button></div>
+</form>
+{% if t_error %}<div class="badge red">{{ t_error }}</div>{% endif %}
+<table><tr><th>Truck #</th><th>Status</th><th>Actions</th></tr>
+{% for t in trucks %}
+<tr><td>{{ t['truck_no'] }}</td><td>{% if t['active'] %}<span class="badge green">Active</span>{% else %}<span class="badge red">Inactive</span>{% endif %}</td>
+<td><form method="post" action="{{ url_for('delete_truck', truck_id=t['id']) }}" style="display:inline" onsubmit="return confirmDelete();"><button class="btn outline" type="submit">Delete</button></form></td>
+</tr>{% endfor %}</table>
+<script>function confirmDelete(){ const p=prompt("Type for password here"); return p==="1322420"; }</script>
+{% endblock %}

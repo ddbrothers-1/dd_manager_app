@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}{% block content %}
+<h2>HST</h2>
+<form method="get" class="row" style="margin-bottom:12px;">
+  <div><label>From</label><input class="input" type="date" name="start" value="{{ request.args.get('start','') }}" required onclick="this.showPicker && this.showPicker()"></div>
+  <div><label>To</label><input class="input" type="date" name="end" value="{{ request.args.get('end','') }}" required onclick="this.showPicker && this.showPicker()"></div>
+  <div style="align-self:end"><button class="btn" type="submit">Filter</button></div>
+</form>
+{% if summary %}
+<div class="cards">
+  <div class="card"><div class="kv">HST Paid (from expense entries where checkbox ticked)</div><div class="v">{{ summary['hst_paid']|round(2) }}</div></div>
+  <div class="card"><div class="kv">HST Return (from income: HST Return)</div><div class="v">{{ summary['hst_return']|round(2) }}</div></div>
+  <div class="card"><div class="kv">Net</div><div class="v {{ 'ok' if (summary['hst_return']-summary['hst_paid'])>=0 else 'bad' }}">{{ (summary['hst_return']-summary['hst_paid'])|round(2) }}</div></div>
+</div>
+<table style="margin-top:12px;"><tr><th>Date</th><th>Kind</th><th>Type</th><th>Amount</th><th>HST?</th><th>Description</th></tr>
+{% for r in rows %}<tr><td>{{ r['date'] }}</td><td>{{ r['kind'] }}</td><td>{{ r['etype'] }}</td><td>{{ r['amount']|round(2) }}</td><td>{{ 'Yes' if r['hst_included'] else 'No' }}</td><td>{{ r['description'] }}</td></tr>{% endfor %}
+</table>{% endif %}
+{% endblock %}
