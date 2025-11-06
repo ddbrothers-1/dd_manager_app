@@ -33,10 +33,6 @@ def init_db():
         FOREIGN KEY(truck_id) REFERENCES trucks(id), FOREIGN KEY(driver_id) REFERENCES drivers(id))""")
     conn.commit(); conn.close()
 
-@app.before_first_request
-def ensure_db():
-    init_db()
-
 @app.context_processor
 def inject_now():
     return dict(now=datetime.datetime.now())
@@ -260,6 +256,9 @@ def hst():
 @app.route('/health')
 def health():
     return jsonify(status='ok'), 200
+
+with app.app_context():
+    init_db()
 
 if __name__ == '__main__':
     init_db()
